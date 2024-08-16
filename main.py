@@ -8,6 +8,7 @@ import boto3
 import json
 import os
 from botocore.exceptions import ClientError
+import numpy as np
 
 app = FastAPI()
 
@@ -37,6 +38,25 @@ questions = [
     "What educational resources or materials do you regularly use?"
 ]
 
+def add_noise_to_input(user_input, epsilon):
+    # Convert input text to a numeric representation (e.g., character count)
+    numeric_representation = len(user_input)  # Example: using the length of the input
+    
+    # Calculate the noise scale based on epsilon and sensitivity
+    sensitivity = 1.0  # Assuming a sensitivity of 1
+    scale = sensitivity / epsilon
+    
+    # Generate Laplacian noise
+    noise = np.random.laplace(0, scale)
+    
+    # Apply the noise to the numeric representation
+    noisy_input_length = max(0, numeric_representation + noise)  # Ensure non-negative length
+    
+    # Optionally, you could map the noisy length back to a similar input
+    noisy_input = user_input[:int(noisy_input_length)]  # Example: truncate the input
+    
+    return noisy_input
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     # Reset session variables
@@ -51,16 +71,20 @@ async def home(request: Request):
 async def process_chat(request: Request, user_input: str = Form(...)):
     question_index = request.session.get('question_index', 0)
     user_responses = request.session.get('user_responses', [])
-
-    # Ensure to store user input if not the first question
+    
+    # Apply DP-OPT to the user input before processing
+    epsilon = 0.5  # Example value, you can adjust based on your needs
+    noisy_user_input = add_noise_to_input(user_input, epsilon)
+    
+    # Ensure to store noisy user input if not the first question
     if question_index > 0:
-        user_responses.append(user_input)
+        user_responses.append(noisy_user_input)
         request.session['user_responses'] = user_responses
 
     if question_index < len(questions):
         next_question = questions[question_index]
         request.session['question_index'] = question_index + 1
-        return JSONResponse({'question': next_question})
+        return JSONResponse({'question': next_question, 'processed_input': noisy_user_input})
     else:
         request.session['question_index'] = len(questions)  # Ensure index is at the end
         return JSONResponse({'response': "Thank you for providing the information. Please click the 'Create a Pathway' button to proceed.", 'show_pathway_button': True})

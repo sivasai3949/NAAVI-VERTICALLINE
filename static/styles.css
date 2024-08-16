@@ -1,360 +1,325 @@
+/* Base Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-  }
-  
-  h1 {
-    text-align: center;
-    color: #333;
-  }
-  
-  .timeline {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .container {
-    padding: 10px 40px;
-    position: relative;
-    background-color: inherit;
-    width: 50%;
-  }
-  
-  .container::after {
-    content: '';
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    right: -17px;
-    background-color: white;
-    border: 4px solid #FF9F55;
-    top: 15px;
-    border-radius: 50%;
-    z-index: 1;
-  }
-  
-  .left {
-    left: 0;
-  }
-  
-  .right {
-    left: 50%;
-  }
-  
-  .right::before {
-    content: " ";
-    height: 0;
-    position: absolute;
-    top: 22px;
-    width: 0;
-    z-index: 1;
-    right: 30px;
-    border: medium solid white;
-    border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent white;
-  }
-  
-  .content {
-    padding: 20px 30px;
-    background-color: white;
-    position: relative;
-    border-radius: 6px;
-  }
-  
-  .content ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .content ul li {
-    padding: 5px 0;
-    font-size: 16px;
-  }
-  
-  
-  
-  body {
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #fff;
-  overflow-x: hidden; /* Prevent horizontal overflow */
-  }
-  
-  header {
-  text-align: center;
-  padding: 20px;
-  background-color: #f7f4f4;
-  color: #075cf9;
-  }
-  
-  header h1 {
-  margin: 0;
-  font-size: 2.5rem;
-  }
-  
-  header p {
-  margin: 0;
-  font-size: 1rem;
-  }
-  
-  main {
-  padding: 8rem; /* Adjust padding as needed */
-  text-align: center;
-  }
-  
-  main h2 {
-  font-size: 1.5rem;
-  margin-bottom: 50px;
-  color: #020568;
-  font-style: italic;
-  }
-  
-  /* Introductory message styling */
-  .intro-message-container {
+  background-color: #f9f9f9;
+  overflow-x: hidden;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+  background-color: #e3f2fd;
+  color: #0277bd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-container {
   display: flex;
-  justify-content: center; /* Center the intro message */
-  margin-bottom: 0px; /* Space below introductory message */
-  }
-  
-  .intro-bubble {
-  background-color: #69cff7;
-  text-align: left;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 20px;
-  border-radius: 20px;
-  width: 50%;
-  max-width: 600px; /* Set a maximum width for consistency */
-  overflow: auto;
-  resize: none; /* Ensure it is not resizable */
+}
+
+.logo-container {
+  margin-right: 20px;
+}
+
+.logo-icon {
+  height: 50px;
+}
+
+.tagline-container {
+  text-align: center;
+  flex-grow: 1;
+}
+
+.tagline-container p {
+  margin: 0;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+.blinking-lightning {
+  font-size: 1.5rem;
+  color: #ffeb3b;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
   }
-  
-  /* Chat container styling */
-  .chat-container {
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  color: #0277bd;
+}
+
+.theme-toggle {
+  display: none;
+}
+
+.theme-toggle-label {
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  background-color: #ccc;
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.theme-toggle-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.theme-toggle:checked + .theme-toggle-label {
+  background-color: #2196f3;
+}
+
+.theme-toggle:checked + .theme-toggle-label .theme-toggle-slider {
+  transform: translateX(24px);
+}
+
+.theme-toggle-text {
+  font-size: 1rem;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+
+.theme-toggle-text#theme-toggle-text-dark {
+  display: none;
+}
+
+body.dark-mode .theme-toggle-text#theme-toggle-text-light {
+  display: none;
+}
+
+body.dark-mode .theme-toggle-text#theme-toggle-text-dark {
+  display: inline;
+}
+
+body.dark-mode .theme-toggle-label {
+  background-color: #2196f3;
+}
+
+body.dark-mode .theme-toggle-slider {
+  background-color: #fff;
+}
+
+main {
+  padding: 2rem;
+  margin: auto;
+  text-align: center;
+}
+
+main h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #0277bd;
+  font-style: italic;
+}
+
+.content-container {
+  padding: 2rem;
+}
+
+.intro-message-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.intro-bubble {
+  background-color: #e1f5fe;
+  text-align: left;
+  padding: 15px 20px;
+  border-radius: 15px;
+  width: 100%;
+  font-weight: 900;
   max-width: 600px;
-  margin: 0 auto; /* Center the chat container */
-  padding: 0; /* No padding to prevent wrapping */
-  background: none; /* Remove background */
-  border: none; /* Remove border */
-  box-shadow: none; /* Remove shadow */
-  overflow: auto; /* Allow scrolling */
-  }
-  
-  /* Chat bubbles styling */
-  .chat-bubble {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-container {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  height: 400px;
+}
+
+.chat-bubble {
   padding: 10px 20px;
   margin: 10px 0;
   border-radius: 20px;
-  max-width: 100%;
-  overflow: auto;
-  display: inline-block; /* Allow bubbles to be on the same line if needed */
-  vertical-align: top; /* Align bubbles at the top */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  }
-  
-  /* Apply resizable feature only to chatbot responses */
-  .robot-bubble {
-  background-color: #e0e0e0;
+  max-width: 80%;
+  box-sizing: border-box;
+  display: block;
+}
+
+.robot-bubble {
+  background-color: #f5f5f5;
   text-align: left;
-  overflow: auto;
-  display: block; /* Ensure it takes a new line */
-  }
-  
-  .user-bubble {
-  background-color: #4a90e2;
+  font-weight: bold;
+}
+
+.user-bubble {
+  background-color: #2196f3;
   color: #fff;
   text-align: left;
-  resize: vertical; /* Allow resizing */
-  overflow: auto;
-  display: block; /* Ensure it takes a new line */
-  border-radius: 20px; /* Smooth rounded corners */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  }
-  
-  /* Form styling for user input */
-  .user-input-form {
+  margin-left: auto;
+  border-radius: 20px;
+  position: relative;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  font-weight: 900;
+}
+
+.user-bubble::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-left: 10px solid transparent;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  position: absolute;
+  top: 10px;
+  right: -10px;
+}
+
+.user-input-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  }
-  
-  /* Input container styling */
-  .input-container {
+}
+
+.input-container {
   position: relative;
   width: 100%;
   max-width: 600px;
-  }
-  
-  /* Textarea styling */
-  textarea {
-  width: 100%;
-  height: 50px;
-  padding: 10px; /* Adjust padding to fit design */
-  border: 2px solid #4a90e2;
+}
+
+textarea {
+  width: calc(100% - 50px);
+  height: 100px;
+  padding: 10px;
+  border: 2px solid #2196f3;
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-right: 50px;
   transition: border-color 0.3s;
-  box-sizing: border-box; /* Ensure padding and border are included in the width */
-  resize: none; /* Ensure it is not resizable */
-  line-height: 1.5; /* Ensure vertical centering */
-  text-align: left; /* Align text to the left */
-  }
-  
-  textarea::placeholder {
-  color: #999; /* Placeholder text color */
-  padding-top: 5px;
-  }
-  
-  textarea:focus {
-  border-color: #357ab8;
-  }
-  
-  /* Button inside the input container */
-  #send-btn {
+  box-sizing: border-box;
+}
+
+textarea::placeholder {
+  color: #999;
+}
+
+textarea:focus {
+  border-color: #0d47a1;
+}
+
+#send-btn {
   position: absolute;
-  right: 5px;
-  top: 39%;
+  right: 10px;
+  top: 50%;
   transform: translateY(-50%);
-  background-color: #4a90e2;
+  background-color: #2196f3;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 40px;
+  padding: 10px;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s;
-  }
-  
-  #send-btn:hover {
-  background-color: #357ab8;
-  }
-  
-  /* Ensure visibility of the "Create Pathway" button */
-  #pathway-btn {
-  background-color: #4a90e2;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 20px; /* Ensure some space above */
-  display: block; /* Center button and add space above */
-  margin: 20px auto; /* Center button horizontally */
-  font-size: medium;
-  }
-  
-  .hidden {
-  display: none;
-  }
-  
-  .logo-container {
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
-  position: absolute;
-  top: 2rem;
-  left: 3rem;
-  }
-  
-  .logo-icon {
-  height: 50px;
-  margin-right: 10px;
-  }
-  
-  .logo-container p {
-  color: #075cf9;
-  position: relative;
-  top: 3rem;
-  right: 12rem;
-  font-style: italic;
-  }
-  
-  /* For pathway results container */
-  .pathway-content {
-  padding: 20px;
-  background: #fff;
+  justify-content: center;
+}
+
+#send-btn:hover {
+  background-color: #0d47a1;
+}
+
+#pathway-btn {
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 0 auto;
-  overflow: auto; /* Allows scrolling */
-  }
-  
-  /* DP-OPT content styling */
-  .dp-opt-content {
-  padding: 40px;
-  background-color: #f3f4f6; /* Light gray background */
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 40px auto; /* Center the DP-OPT section */
-  text-align: left; /* Align text to the left */
-  color: #333;
-  }
-  
-  .dp-opt-heading {
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 20px;
-  }
-  
-  .dp-opt-subheading {
-  font-size: 1.4rem;
-  color: #075cf9;
+  cursor: pointer;
+  transition: background-color 0.3s;
   margin-top: 20px;
-  margin-bottom: 10px;
-  }
-  
-  .dp-opt-text {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  }
-  
-  .dp-opt-features {
-  list-style-type: disc;
-  padding-left: 20px;
-  margin-bottom: 20px;
-  }
-  
-  .dp-opt-instructions {
-  list-style-type: decimal;
-  padding-left: 20px;
-  margin-bottom: 20px;
-  }
-  
-  .dp-opt-features li,
-  .dp-opt-instructions li {
-  margin-bottom: 10px;
-  }
-  
-  .dp-opt-intro {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  }
-  
-  .dp-opt-content img {
-  max-width: 100%;
-  border-radius: 10px;
-  margin: 20px 0;
-  }
-  
-  .dp-opt-content p, .dp-opt-content li {
-  color: #444;
-  }
-  
-  .dp-opt-content p strong {
-  color: #075cf9; /* Highlighting specific text */
-  }
-  
-  .dp-opt-content p em {
-  color: #4a90e2; /* Emphasizing specific text */
-  }
-  
-  .dp-opt-content p span {
-  color: #e74c3c; /* Additional emphasis */
-  }
-  
-  
+  display: block;
+  margin: 20px auto;
+  font-size: medium;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Dark Theme Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+header.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.intro-bubble.dark-mode {
+  background-color: #333;
+}
+
+.chat-container.dark-mode {
+  background-color: #1e1e1e;
+}
+
+.robot-bubble.dark-mode {
+  background-color: #2e2e2e;
+}
+
+.user-bubble.dark-mode {
+  background-color: #1976d2;
+}
+
+textarea.dark-mode {
+  border-color: #1976d2;
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+#send-btn.dark-mode {
+  background-color: #1976d2;
+}
+
+#pathway-btn.dark-mode {
+  background-color: #1976d2;
+}

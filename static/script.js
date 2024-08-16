@@ -34,7 +34,9 @@ function sendUserInput() {
         if (data.error) {
             appendChat("robot", "Error: " + data.error);
         } else {
-            appendChat("user", userInput);
+            // Reflect the server-processed input back to the user
+            appendChat("user", data.processed_input || userInput);
+            
             if (data.response) {
                 appendChat("robot", data.response);
                 triggerConfetti(); // Trigger confetti when response is received
@@ -64,6 +66,7 @@ function appendChat(role, message) {
     var chatBubble = document.createElement('div');
     chatBubble.classList.add('chat-bubble');
     chatBubble.classList.add(role + '-bubble');
+    
     chatBubble.innerText = message;
 
     chatContainer.appendChild(chatBubble);
@@ -76,9 +79,9 @@ function showLoading() {
     var loadingIndicator = document.createElement('div');
     loadingIndicator.id = 'loading-indicator';
     loadingIndicator.classList.add('chat-bubble', 'robot-bubble');
-    loadingIndicator.innerText = '...'; // Loading dots
+    loadingIndicator.innerText = '...';
     chatContainer.appendChild(loadingIndicator);
-    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom of chat
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 function hideLoading() {
@@ -86,32 +89,4 @@ function hideLoading() {
     if (loadingIndicator) {
         loadingIndicator.remove();
     }
-}
-
-function triggerConfetti() {
-    var end = Date.now() + (2 * 1000); // Confetti duration: 2 seconds
-    var colors = ['#bb0000', '#ffffff'];
-
-    function frame() {
-        confetti({
-            particleCount: 2,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: colors
-        });
-        confetti({
-            particleCount: 2,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: colors
-        });
-
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
-    }
-
-    frame();
 }
