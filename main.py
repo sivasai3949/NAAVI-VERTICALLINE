@@ -8,7 +8,7 @@ import boto3
 import json
 import os
 from botocore.exceptions import ClientError
-import numpy as np
+import random
 
 app = FastAPI()
 
@@ -38,24 +38,38 @@ questions = [
     "What educational resources or materials do you regularly use?"
 ]
 
-def add_noise_to_input(user_input, epsilon):
-    # Convert input text to a numeric representation (e.g., character count)
-    numeric_representation = len(user_input)  # Example: using the length of the input
+def perturb_input(user_input, epsilon=0.5):
+    """
+    Apply local differential privacy by perturbing the input text.
+    The epsilon parameter controls the noise level.
+    """
+    words = user_input.split()
+    perturbed_words = []
+
+    for word in words:
+        # Randomly decide to perturb a word based on epsilon
+        if random.random() < epsilon:
+            perturbed_word = add_noise_to_word(word)
+            perturbed_words.append(perturbed_word)
+        else:
+            perturbed_words.append(word)
     
-    # Calculate the noise scale based on epsilon and sensitivity
-    sensitivity = 1.0  # Assuming a sensitivity of 1
-    scale = sensitivity / epsilon
+    return " ".join(perturbed_words)
+
+def add_noise_to_word(word):
+    """
+    Add synthetic noise to a word. This can involve character shuffling, 
+    replacing with synonyms, or inserting random characters.
+    """
+    noise_type = random.choice(['shuffle', 'insert_random'])
     
-    # Generate Laplacian noise
-    noise = np.random.laplace(0, scale)
-    
-    # Apply the noise to the numeric representation
-    noisy_input_length = max(0, numeric_representation + noise)  # Ensure non-negative length
-    
-    # Optionally, you could map the noisy length back to a similar input
-    noisy_input = user_input[:int(noisy_input_length)]  # Example: truncate the input
-    
-    return noisy_input
+    if noise_type == 'shuffle':
+        return ''.join(random.sample(word, len(word)))  # Shuffling characters
+    elif noise_type == 'insert_random':
+        random_char = chr(random.randint(97, 122))  # Random lowercase letter
+        return word[:1] + random_char + word[1:]
+    else:
+        return word  # Default case, no change
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -71,20 +85,19 @@ async def home(request: Request):
 async def process_chat(request: Request, user_input: str = Form(...)):
     question_index = request.session.get('question_index', 0)
     user_responses = request.session.get('user_responses', [])
+
+    # Perturb the input to apply differential privacy
+    perturbed_input = perturb_input(user_input)
     
-    # Apply DP-OPT to the user input before processing
-    epsilon = 0.5  # Example value, you can adjust based on your needs
-    noisy_user_input = add_noise_to_input(user_input, epsilon)
-    
-    # Ensure to store noisy user input if not the first question
+    # Ensure to store perturbed user input if not the first question
     if question_index > 0:
-        user_responses.append(noisy_user_input)
+        user_responses.append(perturbed_input)
         request.session['user_responses'] = user_responses
 
     if question_index < len(questions):
         next_question = questions[question_index]
         request.session['question_index'] = question_index + 1
-        return JSONResponse({'question': next_question, 'processed_input': noisy_user_input})
+        return JSONResponse({'question': next_question})
     else:
         request.session['question_index'] = len(questions)  # Ensure index is at the end
         return JSONResponse({'response': "Thank you for providing the information. Please click the 'Create a Pathway' button to proceed.", 'show_pathway_button': True})

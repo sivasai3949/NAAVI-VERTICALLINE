@@ -15,10 +15,14 @@ document.getElementById('pathway-btn').addEventListener('click', function(event)
     createPathway();
 });
 
-function sendUserInput() {
-    var userInput = document.getElementById('user-input').value;
-    if (!userInput.trim()) return;
+// Theme toggle functionality
+document.getElementById('theme-toggle').addEventListener('change', function() {
+    document.body.classList.toggle('dark-mode');
+});
 
+function sendUserInput() {
+    var userInput = document.getElementById('user-input').value.trim();
+    if (!userInput) return;
     showLoading(); // Show loading indicator
 
     fetch('/process_chat', {
@@ -36,7 +40,6 @@ function sendUserInput() {
         } else {
             // Reflect the server-processed input back to the user
             appendChat("user", data.processed_input || userInput);
-            
             if (data.response) {
                 appendChat("robot", data.response);
                 triggerConfetti(); // Trigger confetti when response is received
@@ -66,9 +69,7 @@ function appendChat(role, message) {
     var chatBubble = document.createElement('div');
     chatBubble.classList.add('chat-bubble');
     chatBubble.classList.add(role + '-bubble');
-    
     chatBubble.innerText = message;
-
     chatContainer.appendChild(chatBubble);
     document.getElementById('user-input').value = ''; // Clear input field after sending
     chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom of chat
@@ -89,4 +90,10 @@ function hideLoading() {
     if (loadingIndicator) {
         loadingIndicator.remove();
     }
+}
+
+function triggerConfetti() {
+    var confettiSettings = { target: 'confetti-canvas', max: 80, clock: 50 };
+    var confetti = new ConfettiGenerator(confettiSettings);
+    confetti.render();
 }
