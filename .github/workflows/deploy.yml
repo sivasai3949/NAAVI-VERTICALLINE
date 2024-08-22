@@ -3,7 +3,7 @@ name: Deploy FastAPI to AWS
 on:
   push:
     branches:
-      - Main2  # Adjust if your branch is different
+      - Main2  # Ensure this matches your branch name
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.11.5'  # Adjust if you're using a different Python version
+        python-version: '3.11.5'
 
     - name: Install Python dependencies
       run: |
@@ -30,7 +30,7 @@ jobs:
         username: ${{ secrets.AWS_USERNAME }}
         key: ${{ secrets.AWS_KEY }}
         source: "./"
-        target: "/home/ubuntu/NAAVI-VERTICALLINE"  # Your app directory
+        target: "/home/ubuntu/NAAVI-VERTICALLINE"
 
     - name: Execute SSH commands
       uses: appleboy/ssh-action@v0.1.5
@@ -40,7 +40,5 @@ jobs:
         key: ${{ secrets.AWS_KEY }}
         script: |
           cd /home/ubuntu/NAAVI-VERTICALLINE
-          # Stop the existing uvicorn process if necessary
           pkill -f 'uvicorn main:app'
-          # Start the FastAPI application
           nohup uvicorn main:app --host 0.0.0.0 --port 8000 --reload > app.log 2>&1 &
