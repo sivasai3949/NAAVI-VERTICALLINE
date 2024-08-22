@@ -3,7 +3,7 @@ name: Deploy FastAPI to AWS
 on:
   push:
     branches:
-      - main2  # Adjust if your branch is different
+      - Main2  # Adjust if your branch is different
 
 jobs:
   deploy:
@@ -23,17 +23,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Decode SSH Key
-      run: |
-        echo "${{ secrets.AWS_KEY }}" | base64 -d > /tmp/your-key.pem
-        chmod 600 /tmp/your-key.pem
-
     - name: Copy files via SSH
       uses: appleboy/scp-action@v0.1.3
       with:
         host: ${{ secrets.AWS_HOST }}
         username: ${{ secrets.AWS_USERNAME }}
-        key: /tmp/your-key.pem
+        key: ${{ secrets.AWS_KEY }}
         source: "./"
         target: "/home/ubuntu/NAAVI-VERTICALLINE"  # Your app directory
 
@@ -42,7 +37,7 @@ jobs:
       with:
         host: ${{ secrets.AWS_HOST }}
         username: ${{ secrets.AWS_USERNAME }}
-        key: /tmp/your-key.pem
+        key: ${{ secrets.AWS_KEY }}
         script: |
           cd /home/ubuntu/NAAVI-VERTICALLINE
           # Stop the existing uvicorn process if necessary
